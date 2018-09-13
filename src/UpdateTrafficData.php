@@ -84,9 +84,15 @@ class UpdateTrafficData extends AbstractQueuedJob {
             if (!$page || $page->ExcludeFromTrafficCalculation) {
                 continue;
             }
-            $page->LastPeriodTraffic = $pageData['views'];
-            $page->TrafficUpdated = DBDatetime::now()->getValue();
-            $page->write();
+            $trafficStore = TrafficData::get()->filter([
+                'ObjectID' => $page->ID
+            ])->first();
+            if (!$trafficStore) {
+                $trafficStore = new TrafficData();
+                $trafficStore->ObjectID = $page->ID;
+                $trafficStore->LastPeriodTraffic = $pageData['views'];
+                $trafficStore->write();
+            }
             if (!$page->hasMethod('Tags')) {
                 continue;
             }
@@ -98,15 +104,25 @@ class UpdateTrafficData extends AbstractQueuedJob {
                 }
             }
         }
+        $trafficStore = NULL;
 
         // Step 4: Write traffic deltas to Tags
         $this->currentStep = 4;
         foreach ($tags as $tagID => $tagData) {
             $tag = BlogTag::get()->byID($tagID);
             if ($tag) {
-                $tag->LastPeriodTraffic = $tagData;
+                /*$tag->LastPeriodTraffic = $tagData;
                 $tag->TrafficUpdated = DBDatetime::now()->getValue();
-                $tag->write();
+                $tag->write();*/
+                $trafficStore = TrafficData::get()->filter([
+                    'ObjectID' => $page->ID
+                ])->first();
+                if (!$trafficStore) {
+                    $trafficStore = new TrafficData();
+                    $trafficStore->ObjectID = $page->ID;
+                    $trafficStore->LastPeriodTraffic = $pageData['views'];
+                    $trafficStore->write();
+                }
             }
         }
 

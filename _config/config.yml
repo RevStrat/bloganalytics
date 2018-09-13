@@ -21,13 +21,9 @@ SilverStripe\Core\Injector\Injector:
             # 1 or more Fieldname: 'value' sets be passed to the constructor OPTIONAL
             repeat: 300
             title: 'Scheduled tag traffic monitoring'
-SilverStripe\Blog\Model\BlogPost:
-    extensions:
-        - RevStrat\BlogAnalytics\BlogPostExtension
 SilverStripe\Blog\Model\BlogTag:
-    extensions:
-        - RevStrat\BlogAnalytics\TrafficExtension
-Page:
+  extensions:
+    - RevStrat\BlogAnalytics\TrafficExtension
+SilverStripe\CMS\Model\SiteTree:
   extensions:
     - RevStrat\BlogAnalytics\PageExtension
-    - RevStrat\BlogAnalytics\TrafficExtension

@@ -1,12 +1,11 @@
 <?php
 
 namespace RevStrat\BlogAnalytics;
-use Page;
+
 use SilverStripe\Forms\FieldList;
 use SilverStripe\Forms\CheckboxField;
-use SilverStripe\ORM\DataExtension;
 
-class PageExtension extends DataExtension {
+class PageExtension extends TrafficExtension {
     private static $db = [
         'ExcludeFromTrafficCalculation' => 'Boolean'
     ];
