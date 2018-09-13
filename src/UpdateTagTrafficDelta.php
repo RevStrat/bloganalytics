@@ -85,7 +85,7 @@ class UpdateTagTrafficDelta extends AbstractQueuedJob {
             $page = Page::get()->filter([
                 'URLSegment' => $pageData['path']
             ])->first();
-            if (!$page) {
+            if (!$page || $page->ExcludeFromTrafficCalculation) {
                 continue;
             }
             foreach ($page->Tags() as $tag) {

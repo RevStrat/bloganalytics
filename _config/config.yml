@@ -9,7 +9,7 @@ SilverStripe\Core\Injector\Injector:
         # This key is used as the title for error logs and alert emails
         TagTrafficDeltaJob:
           # The job type should be the class name of a job REQUIRED
-          type: '\RevStrat\BlogAnalytics\UpdateTagTrafficDelta'
+          type: 'RevStrat\BlogAnalytics\UpdateTagTrafficDelta'
           filter:
             # 1 or more Fieldname: 'value' sets that will be queried on REQUIRED
             #  These can be valid ORM filter
@@ -27,3 +27,6 @@ SilverStripe\Blog\Model\BlogPost:
 SilverStripe\Blog\Model\BlogTag:
     extensions:
         - RevStrat\BlogAnalytics\BlogTagExtension
+Page:
+  extensions:
+    - RevStrat\BlogAnalytics\PageExtension
