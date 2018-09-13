@@ -3,6 +3,7 @@
 namespace RevStrat\BlogAnalytics;
 use Page;
 use SilverStripe\Blog\Model\BlogTag;
+use SilverStripe\Core\Environment;
 use SilverStripe\ORM\FieldType\DBDatetime;
 use Symbiote\QueuedJobs\Services\QueuedJob;
 use Symbiote\QueuedJobs\Services\AbstractQueuedJob;
@@ -52,7 +53,6 @@ class UpdateTrafficData extends AbstractQueuedJob {
                 $sanitized = preg_replace('{/$}', '', $sanitized);
                 $link_array = explode('/',$sanitized);
                 $path = end($link_array);
-                error_log(json_encode($link_array));
             }
             // Get metric (page views)
             for ($j = 0; $j < count($metrics); $j++) {
@@ -63,7 +63,8 @@ class UpdateTrafficData extends AbstractQueuedJob {
                 }
             }
 
-            if ($currentViews < 1000) {
+            $minimumCutoff = Environment::getEnv('GAMINCUTOFF');
+            if ($minimumCutoff && $currentViews < $minimumCutoff ) {
                 break;
             }
 
