@@ -13,7 +13,7 @@ SilverStripe\Core\Injector\Injector:
           filter:
             # 1 or more Fieldname: 'value' sets that will be queried on REQUIRED
             #  These can be valid ORM filter
-            JobTitle: 'Update traffic delta'
+            JobTitle: 'Update traffic data'
           # Sets whether the job will be recreated or not OPTIONAL
           recreate: 1
           # Parameters set on the recreated object OPTIONAL
