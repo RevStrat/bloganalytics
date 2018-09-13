@@ -8,7 +8,7 @@ use Symbiote\QueuedJobs\Services\QueuedJob;
 use Symbiote\QueuedJobs\Services\AbstractQueuedJob;
 use Symbiote\QueuedJobs\Services\QueuedJobService;
 
-class UpdateTagTrafficDelta extends AbstractQueuedJob {
+class UpdateTrafficData extends AbstractQueuedJob {
     public function __construct() {
         $this->currentStep = 0;
         $this->totalSteps = 4;
@@ -19,7 +19,7 @@ class UpdateTagTrafficDelta extends AbstractQueuedJob {
     }
 
     public function getTitle() {
-        return 'Update tag traffic delta';
+        return 'Update traffic data';
     }
 
     public function process() {
@@ -48,16 +48,11 @@ class UpdateTagTrafficDelta extends AbstractQueuedJob {
             $skip = false;
             // Get dimension (page path)
             for ($i = 0; $i < count($dimensionHeaders) && $i < count($dimensions); $i++) {
-                $path = $dimensions[$i];
-                if (substr($path, 0, 10) !== '/articles/') {
-                    $skip = true;
-                } else {
-                    $path = str_replace('/articles/', '', $path);
-                    $path = str_replace('/', '', $path);
-                }
-            }
-            if ($skip) {
-                continue;
+                $sanitized = $url = preg_replace('/\?.*/', '', $dimensions[$i]);
+                $sanitized = preg_replace('{/$}', '', $sanitized);
+                $link_array = explode('/',$sanitized);
+                $path = end($link_array);
+                error_log(json_encode($link_array));
             }
             // Get metric (page views)
             for ($j = 0; $j < count($metrics); $j++) {
@@ -78,7 +73,7 @@ class UpdateTagTrafficDelta extends AbstractQueuedJob {
                 'views' => $currentViews
             ];
         }
-        // Step 3: Compute average traffic for each tag
+        // Step 3: Compute average traffic for each page and tag
         $this->currentStep = 3;
         $tags = [];
         foreach ($pages as $pageData) {
@@ -86,6 +81,12 @@ class UpdateTagTrafficDelta extends AbstractQueuedJob {
                 'URLSegment' => $pageData['path']
             ])->first();
             if (!$page || $page->ExcludeFromTrafficCalculation) {
+                continue;
+            }
+            $page->LastPeriodTraffic = $pageData['views'];
+            $page->TrafficUpdated = DBDatetime::now()->getValue();
+            $page->write();
+            if (!$page->hasMethod('Tags')) {
                 continue;
             }
             foreach ($page->Tags() as $tag) {
@@ -110,7 +111,7 @@ class UpdateTagTrafficDelta extends AbstractQueuedJob {
 
         $this->isComplete = true;
 
-        $nextQueuedJob = new UpdateTagTrafficDelta();
+        $nextQueuedJob = new UpdateTrafficData();
         singleton(QueuedJobService::class)
             ->queueJob($nextQueuedJob, date("Y-m-d H:i:s", strtotime('+3 hours'))); // Four times per day
 

@@ -7,13 +7,13 @@ SilverStripe\Core\Injector\Injector:
     properties:
       defaultJobs:
         # This key is used as the title for error logs and alert emails
-        TagTrafficDeltaJob:
+        UpdateTrafficData:
           # The job type should be the class name of a job REQUIRED
-          type: 'RevStrat\BlogAnalytics\UpdateTagTrafficDelta'
+          type: 'RevStrat\BlogAnalytics\UpdateTrafficData'
           filter:
             # 1 or more Fieldname: 'value' sets that will be queried on REQUIRED
             #  These can be valid ORM filter
-            JobTitle: 'Update tag traffic delta'
+            JobTitle: 'Update traffic delta'
           # Sets whether the job will be recreated or not OPTIONAL
           recreate: 1
           # Parameters set on the recreated object OPTIONAL
@@ -26,7 +26,8 @@ SilverStripe\Blog\Model\BlogPost:
         - RevStrat\BlogAnalytics\BlogPostExtension
 SilverStripe\Blog\Model\BlogTag:
     extensions:
-        - RevStrat\BlogAnalytics\BlogTagExtension
+        - RevStrat\BlogAnalytics\TrafficExtension
 Page:
   extensions:
     - RevStrat\BlogAnalytics\PageExtension
+    - RevStrat\BlogAnalytics\TrafficExtension
