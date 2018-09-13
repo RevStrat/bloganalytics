@@ -1,5 +1,5 @@
 {
-  "name": "RevStrat/bloganalytics",
+  "name": "revstrat/bloganalytics",
   "description": "Pulls Google Analytics data and provides queued jobs for updating data",
   "homepage": "http://github.com/RevStrat/bloganalytics",
   "keywords": ["silverstripe", "blog", "analytics"],
