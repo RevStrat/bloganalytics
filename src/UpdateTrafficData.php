@@ -111,15 +111,12 @@ class UpdateTrafficData extends AbstractQueuedJob {
         foreach ($tags as $tagID => $tagData) {
             $tag = BlogTag::get()->byID($tagID);
             if ($tag) {
-                /*$tag->LastPeriodTraffic = $tagData;
-                $tag->TrafficUpdated = DBDatetime::now()->getValue();
-                $tag->write();*/
                 $trafficStore = TrafficData::get()->filter([
-                    'ObjectID' => $page->ID
+                    'ObjectID' => $tag->ID
                 ])->first();
                 if (!$trafficStore) {
                     $trafficStore = new TrafficData();
-                    $trafficStore->ObjectID = $page->ID;
+                    $trafficStore->ObjectID = $tag->ID;
                     $trafficStore->LastPeriodTraffic = $pageData['views'];
                     $trafficStore->write();
                 }
