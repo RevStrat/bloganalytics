@@ -112,7 +112,7 @@ class UpdateTagTrafficDelta extends AbstractQueuedJob {
 
         $nextQueuedJob = new UpdateTagTrafficDelta();
         singleton(QueuedJobService::class)
-            ->queueJob($nextQueuedJob, strtotime('today midnight'));
+            ->queueJob($nextQueuedJob, date("Y-m-d H:i:s", strtotime('+3 hours'))); // Four times per day
 
         return;
     }
