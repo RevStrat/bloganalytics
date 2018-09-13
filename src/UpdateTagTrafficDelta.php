@@ -6,6 +6,7 @@ use SilverStripe\Blog\Model\BlogTag;
 use SilverStripe\ORM\FieldType\DBDatetime;
 use Symbiote\QueuedJobs\Services\QueuedJob;
 use Symbiote\QueuedJobs\Services\AbstractQueuedJob;
+use Symbiote\QueuedJobs\Services\QueuedJobService;
 
 class UpdateTagTrafficDelta extends AbstractQueuedJob {
     public function __construct() {
@@ -108,6 +109,11 @@ class UpdateTagTrafficDelta extends AbstractQueuedJob {
         }
 
         $this->isComplete = true;
+
+        $nextQueuedJob = new UpdateTagTrafficDelta();
+        singleton(QueuedJobService::class)
+            ->queueJob($nextQueuedJob, strtotime('today midnight'));
+
         return;
     }
 }
