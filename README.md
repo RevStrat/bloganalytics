@@ -16,15 +16,15 @@ The SilverStripe BlogAnalytics module uses a Google Service Account to interact 
 <pre>
 {
   "type": "service_account",
-  "project_id": "\<YOUR GOOGLE API PROJET ID>",
-  "private_key_id": "\<YOUR PRIVATE KEY ID>",
-  "private_key": "\<YOUR PRIVATE KEY>",
-  "client_email": "\<EMAIL ADDRESS FOR THE SERVICE ACCOUNT>",
-  "client_id": "\<CLIENT ID>",
-  "auth_uri": "\<AUTH URI>",
-  "token_uri": "\<TOKEN URI>",
+  "project_id": "YOUR GOOGLE API PROJET ID",
+  "private_key_id": "YOUR PRIVATE KEY ID",
+  "private_key": "YOUR PRIVATE KEY",
+  "client_email": "EMAIL ADDRESS FOR THE SERVICE ACCOUNT",
+  "client_id": "CLIENT ID",
+  "auth_uri": "AUTH URI",
+  "token_uri": "TOKEN URI",
   "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
-  "client_x509_cert_url": "\<CERT URL>"
+  "client_x509_cert_url": "CERT URL"
 }
 </pre>
 2. Add the email address for the account to Google Analytics
