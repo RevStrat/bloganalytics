@@ -38,6 +38,6 @@ GASTART="7daysago"
 GAEND="today"
 GAMINCUTOFF="100" # Don't track pages with fewer views than this
 </pre>
-6. Install with `composer require revstrat\bloganalytics @dev`
+6. Install with `composer require revstrat\bloganalytics`
 7. Run `/dev/build?flush=all`.
 8. Create a queued job of type RevStrat\BlogAnalytics\UpdateTrafficData and run it. The task will schedule itself on completion for 3 hours in the future
