@@ -32,7 +32,7 @@ The SilverStripe BlogAnalytics module uses a Google Service Account to interact 
 4. base64 encode the configuration
 5. Add configuration to your environment:
 <pre>
-GASERVICE=""
+GASERVICE="BASE64 ENCODED JSON CONFIGURATION FILE CONTENTS (to avoid escaping values in the private key)"
 GAVIEW="VIEW ID"
 GASTART="7daysago"
 GAEND="today"
