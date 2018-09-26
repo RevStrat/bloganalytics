@@ -23,9 +23,6 @@
     }
   },
   "extra": {
-    "installer-name": "bloganalytics",
-    "expose": [
-        "client"
-    ]
+    "installer-name": "bloganalytics"
   }
 }
