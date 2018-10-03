@@ -41,3 +41,30 @@ GAMINCUTOFF="100" # Don't track pages with fewer views than this
 6. Install with `composer require revstrat\bloganalytics`
 7. Run `/dev/build?flush=all`.
 8. Create a queued job of type RevStrat\BlogAnalytics\UpdateTrafficData and run it. The task will schedule itself on completion for 3 hours in the future
+
+## Template Usage
+
+Examples:
+
+TopTags, TopSiteTree, TopBlogPosts each return a list, with the target object itself under "Item", and the traffic count under "Traffic".
+
+Each can take an argument to override the default result count limit.
+
+```
+<h3>Top Tags</h3>
+<% loop TopTags(6) %>
+    $Item.Title, $Traffic<br />
+<% end_loop %>
+```
+
+```
+<% loop TopSiteTree %>
+  $Item.Title, $Traffic<br />
+<% end_loop %>
+```
+
+```
+<% loop TopBlogPosts %>
+  $Item.Title, $Traffic<br />
+<% end_loop %>
+```
