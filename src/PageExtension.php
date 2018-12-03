@@ -63,7 +63,7 @@ class PageExtension extends TrafficExtension {
         $query = DB::query("
             SELECT $class.ID, TrafficData.ObjectID, TrafficData.LastPeriodTraffic
             FROM $class
-            LEFT JOIN TrafficData ON $class.ID = TrafficData.ObjectID
+            LEFT JOIN TrafficData ON $class.ID = TrafficData.ObjectID AND TrafficData.ObjectClass = '$class'
             ORDER BY TrafficData.LastPeriodTraffic DESC
             LIMIT $limit
         ");

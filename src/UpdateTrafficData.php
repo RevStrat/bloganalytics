@@ -24,6 +24,14 @@ class UpdateTrafficData extends AbstractQueuedJob {
     }
 
     public function process() {
+        // Housekeeping - check if we have traffic data with no class set. Delete them.
+        $badTraffic = TrafficData::get()->filter([
+            'ObjectClass' => NULL
+        ]);
+        foreach ($badTraffic as $trafficData) {
+            $trafficData->delete();
+        }
+
         // Step 1: Pull Google Analytics
         $this->currentStep = 1;
         $client = GoogleAnalytics::initializeAnalytics();
@@ -85,11 +93,13 @@ class UpdateTrafficData extends AbstractQueuedJob {
                 continue;
             }
             $trafficStore = TrafficData::get()->filter([
-                'ObjectID' => $page->ID
+                'ObjectID' => $page->ID,
+                'ObjectClass' => 'Page'
             ])->first();
             if (!$trafficStore) {
                 $trafficStore = new TrafficData();
                 $trafficStore->ObjectID = $page->ID;
+                $trafficStore->ObjectClass = 'Page';
                 $trafficStore->LastPeriodTraffic = $pageData['views'];
                 $trafficStore->write();
             }
@@ -104,6 +114,7 @@ class UpdateTrafficData extends AbstractQueuedJob {
                 }
             }
         }
+
         $trafficStore = NULL;
 
         // Step 4: Write traffic deltas to Tags
@@ -112,12 +123,14 @@ class UpdateTrafficData extends AbstractQueuedJob {
             $tag = BlogTag::get()->byID($tagID);
             if ($tag) {
                 $trafficStore = TrafficData::get()->filter([
-                    'ObjectID' => $tag->ID
+                    'ObjectID' => $tag->ID,
+                    'ObjectClass' => 'BlogTag'
                 ])->first();
                 if (!$trafficStore) {
                     $trafficStore = new TrafficData();
                     $trafficStore->ObjectID = $tag->ID;
-                    $trafficStore->LastPeriodTraffic = $pageData['views'];
+                    $trafficStore->ObjectClass = 'BlogTag';
+                    $trafficStore->LastPeriodTraffic = $tagData;
                     $trafficStore->write();
                 }
             }
