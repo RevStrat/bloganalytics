@@ -70,7 +70,6 @@ class PageExtension extends TrafficExtension {
                 'LastPeriodTraffic' => $trafficItem->LastPeriodTraffic
             ];
         }
-        error_log(json_encode($result));
         return $result;
     }
 }
