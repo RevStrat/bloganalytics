@@ -34,7 +34,7 @@ class PageExtension extends TrafficExtension {
     }
 
     public function getTopSiteTree($limit = 6) {
-        $results = $this->getTopByClass('SiteTree', $limit);
+        $results = $this->getTopByClass('Page', $limit);
         $treeAndTraffic = new ArrayList();
         foreach ($results as $item) {
             $tag = SiteTree::get()->byId($item['ID']);
@@ -47,7 +47,7 @@ class PageExtension extends TrafficExtension {
     }
 
     public function getTopBlogPosts($limit = 6) {
-        $results = $this->getTopByClass('BlogPost', $limit);
+        $results = $this->getTopByClass('Page', $limit);
         $postsAndTraffic = new ArrayList();
         foreach ($results as $item) {
             $tag = BlogPost::get()->byId($item['ID']);
@@ -60,19 +60,17 @@ class PageExtension extends TrafficExtension {
     }
 
     public function getTopByClass($class = "Page", $limit = 6) {
-        $query = DB::query("
-            SELECT $class.ID, TrafficData.ObjectID, TrafficData.LastPeriodTraffic
-            FROM $class
-            LEFT JOIN TrafficData ON $class.ID = TrafficData.ObjectID AND TrafficData.ObjectClass = '$class'
-            ORDER BY TrafficData.LastPeriodTraffic DESC
-            LIMIT $limit
-        ");
+        $trafficData = TrafficData::get()->filter([
+            'ObjectClass' => $class
+        ])->sort('LastPeriodTraffic', 'DESC')->limit($limit);
         $result = [];
-        if ($query) {
-            foreach ($query as $item) {
-                $result[] = $item;
-            }
+        foreach ($trafficData as $trafficItem) {
+            $result[] = [
+                'ID' => $trafficItem->ObjectID,
+                'LastPeriodTraffic' => $trafficItem->LastPeriodTraffic
+            ];
         }
+        error_log(json_encode($result));
         return $result;
     }
 }
