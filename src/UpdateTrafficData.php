@@ -24,14 +24,6 @@ class UpdateTrafficData extends AbstractQueuedJob {
     }
 
     public function process() {
-        // Housekeeping - check if we have traffic data with no class set. Delete them.
-        $badTraffic = TrafficData::get()->filter([
-            'ObjectClass' => NULL
-        ]);
-        foreach ($badTraffic as $trafficData) {
-            $trafficData->delete();
-        }
-
         // Step 1: Pull Google Analytics
         $this->currentStep = 1;
         $client = GoogleAnalytics::initializeAnalytics();
@@ -82,6 +74,13 @@ class UpdateTrafficData extends AbstractQueuedJob {
                 'views' => $currentViews
             ];
         }
+        
+        // Lets do some housekeeping. We never want stale data, so lets clear everything out.
+        $oldTraffic = TrafficData::get();
+        foreach ($oldTraffic as $trafficData) {
+            $trafficData->delete();
+        }
+
         // Step 3: Compute average traffic for each page and tag
         $this->currentStep = 3;
         $tags = [];
