@@ -91,7 +91,7 @@ class UpdateTrafficData extends AbstractQueuedJob {
             if (!$page || $page->ExcludeFromTrafficCalculation) {
                 continue;
             }
-            $trafficStore = TrafficData::get()->filter([
+            /*$trafficStore = TrafficData::get()->filter([
                 'ObjectID' => $page->ID,
                 'ObjectClass' => 'Page'
             ])->first();
@@ -101,7 +101,12 @@ class UpdateTrafficData extends AbstractQueuedJob {
                 $trafficStore->ObjectClass = 'Page';
                 $trafficStore->LastPeriodTraffic = $pageData['views'];
                 $trafficStore->write();
-            }
+            }*/
+            $trafficStore = new TrafficData();
+            $trafficStore->ObjectID = $page->ID;
+            $trafficStore->ObjectClass = 'Page';
+            $trafficStore->LastPeriodTraffic = $pageData['views'];
+            $trafficStore->write();
             if (!$page->hasMethod('Tags')) {
                 continue;
             }
@@ -121,7 +126,7 @@ class UpdateTrafficData extends AbstractQueuedJob {
         foreach ($tags as $tagID => $tagData) {
             $tag = BlogTag::get()->byID($tagID);
             if ($tag) {
-                $trafficStore = TrafficData::get()->filter([
+                /*$trafficStore = TrafficData::get()->filter([
                     'ObjectID' => $tag->ID,
                     'ObjectClass' => 'BlogTag'
                 ])->first();
@@ -131,7 +136,12 @@ class UpdateTrafficData extends AbstractQueuedJob {
                     $trafficStore->ObjectClass = 'BlogTag';
                     $trafficStore->LastPeriodTraffic = $tagData;
                     $trafficStore->write();
-                }
+                }*/
+                $trafficStore = new TrafficData();
+                $trafficStore->ObjectID = $tag->ID;
+                $trafficStore->ObjectClass = 'BlogTag';
+                $trafficStore->LastPeriodTraffic = $tagData;
+                $trafficStore->write();
             }
         }
 
