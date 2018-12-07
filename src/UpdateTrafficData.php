@@ -75,11 +75,8 @@ class UpdateTrafficData extends AbstractQueuedJob {
             ];
         }
         
-        // Lets do some housekeeping. We never want stale data, so lets clear everything out.
-        $oldTraffic = TrafficData::get();
-        foreach ($oldTraffic as $trafficData) {
-            $trafficData->delete();
-        }
+        // We're going to want to remove old records after generating new ones. Lets get the old objects
+        $oldTrafficData = TrafficData::get()->toArray();
 
         // Step 3: Compute average traffic for each page and tag
         $this->currentStep = 3;
@@ -145,6 +142,11 @@ class UpdateTrafficData extends AbstractQueuedJob {
             }
         }
 
+        // Clean up - remove the old records
+        foreach ($oldTrafficData as $toDelete) {
+            $toDelete->delete();
+        }
+        
         $this->isComplete = true;
 
         $nextQueuedJob = new UpdateTrafficData();
