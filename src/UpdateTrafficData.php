@@ -149,9 +149,9 @@ class UpdateTrafficData extends AbstractQueuedJob {
         
         $this->isComplete = true;
 
-        $nextQueuedJob = new UpdateTrafficData();
+        /*$nextQueuedJob = new UpdateTrafficData();
         singleton(QueuedJobService::class)
-            ->queueJob($nextQueuedJob, date("Y-m-d H:i:s", strtotime('+3 hours'))); // Four times per day
+            ->queueJob($nextQueuedJob, date("Y-m-d H:i:s", strtotime('+3 hours'))); // Four times per day*/
 
         return;
     }
