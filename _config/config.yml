@@ -2,25 +2,25 @@
 Name: bloganalytics
 ---
 
-SilverStripe\Core\Injector\Injector:
-  Symbiote\QueuedJobs\Services\QueuedJobService:
-    properties:
-      defaultJobs:
-        # This key is used as the title for error logs and alert emails
-        UpdateTrafficData:
-          # The job type should be the class name of a job REQUIRED
-          type: 'RevStrat\BlogAnalytics\UpdateTrafficData'
-          filter:
-            # 1 or more Fieldname: 'value' sets that will be queried on REQUIRED
-            #  These can be valid ORM filter
-            JobTitle: 'Update traffic data'
-          # Sets whether the job will be recreated or not OPTIONAL
-          recreate: 1
-          # Parameters set on the recreated object OPTIONAL
-          construct:
-            # 1 or more Fieldname: 'value' sets be passed to the constructor OPTIONAL
-            repeat: 300
-            title: 'Scheduled tag traffic monitoring'
+#SilverStripe\Core\Injector\Injector:
+#  Symbiote\QueuedJobs\Services\QueuedJobService:
+#    properties:
+#      defaultJobs:
+#        # This key is used as the title for error logs and alert emails
+#        UpdateTrafficData:
+#          # The job type should be the class name of a job REQUIRED
+#          type: 'RevStrat\BlogAnalytics\UpdateTrafficData'
+#          filter:
+#            # 1 or more Fieldname: 'value' sets that will be queried on REQUIRED
+#            #  These can be valid ORM filter
+#            JobTitle: 'Update traffic data'
+#          # Sets whether the job will be recreated or not OPTIONAL
+#          recreate: 1
+#          # Parameters set on the recreated object OPTIONAL
+#          construct:
+#            # 1 or more Fieldname: 'value' sets be passed to the constructor OPTIONAL
+#            repeat: 300
+#            title: 'Scheduled tag traffic monitoring'
 SilverStripe\Blog\Model\BlogTag:
   extensions:
     - RevStrat\BlogAnalytics\TrafficExtension
